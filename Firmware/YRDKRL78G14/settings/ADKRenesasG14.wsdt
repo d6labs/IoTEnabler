@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>ADKRenesasG14/Debug</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>205</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      <PreferedWindows><Position>1</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>SourceBrowser</Factory></Window></Windows></PreferedWindows></Workspace>
+      <Build>
+        <PreferedWindows>
+          
+          
+          
+          
+        <Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>961</ColumnWidth1><ColumnWidth2>625</ColumnWidth2><ColumnWidth3>367</ColumnWidth3></Build>
+      <Find-in-Files>
+        <PreferedWindows>
+          
+          
+          
+          
+        <Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows>
+        
+        
+        
+      <ColumnWidth0>733</ColumnWidth0><ColumnWidth1>51</ColumnWidth1><ColumnWidth2>746</ColumnWidth2><ColumnWidth3>315</ColumnWidth3></Find-in-Files>
+    <TerminalIO/><Debug-Log><PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Build</Factory></Window></Windows></PreferedWindows><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>1085</ColumnWidth1></Debug-Log><SourceBrowser><PreferedWindows><Position>1</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows></SourceBrowser><Find-All-Declarations><ColumnWidth0>552</ColumnWidth0><ColumnWidth1>78</ColumnWidth1><ColumnWidth2>946</ColumnWidth2></Find-All-Declarations><QuickWatch><PreferedWindows><Position>4</Position><ScreenPosX>-908</ScreenPosX><ScreenPosY>168</ScreenPosY><Windows/></PreferedWindows></QuickWatch><Find-All-References><ColumnWidth0>552</ColumnWidth0><ColumnWidth1>78</ColumnWidth1><ColumnWidth2>946</ColumnWidth2></Find-All-References><CallStack><PreferedWindows><Position>4</Position><ScreenPosX>-1042</ScreenPosX><ScreenPosY>44</ScreenPosY><Windows/></PreferedWindows></CallStack><WATCH_1><PreferedWindows><Position>4</Position><ScreenPosX>-804</ScreenPosX><ScreenPosY>44</ScreenPosY><Windows/></PreferedWindows></WATCH_1><Register><PreferedWindows><Position>4</Position><ScreenPosX>-319</ScreenPosX><ScreenPosY>47</ScreenPosY><Windows/></PreferedWindows></Register></Static>
+    <Windows>
+      
+    <Wnd0><Tabs><Tab><Identity>TabID-13489-22513</Identity><TabName>Workspace</TabName><Factory>Workspace</Factory><Session><NodeDict><ExpandedNode>ADKRenesasG14</ExpandedNode><ExpandedNode>ADKRenesasG14/Apps</ExpandedNode><ExpandedNode>ADKRenesasG14/Apps/xr20m1170.c</ExpandedNode><ExpandedNode>ADKRenesasG14/YRDKRL78G14</ExpandedNode><ExpandedNode>ADKRenesasG14/YRDKRL78G14/applilet3_src</ExpandedNode><ExpandedNode>ADKRenesasG14/YRDKRL78G14/drv</ExpandedNode><ExpandedNode>ADKRenesasG14/YRDKRL78G14/drv/RDKRL78_spi.c</ExpandedNode></NodeDict></Session></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd0><Wnd1><Tabs><Tab><Identity>TabID-11392-25545</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab><Tab><Identity>TabID-11070-20211</Identity><TabName>Find All Declarations</TabName><Factory>Find-All-Declarations</Factory><Session/></Tab><Tab><Identity>TabID-19104-14371</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab><Tab><Identity>TabID-7075-30108</Identity><TabName>References</TabName><Factory>Find-All-References</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd1></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\drv\led.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>97</YPos2><SelStart2>3999</SelStart2><SelEnd2>3999</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\HostApp.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>768</SelStart2><SelEnd2>768</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\drv\SPI.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>844</SelStart2><SelEnd2>844</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Apps\xr20m1170.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>15</YPos2><SelStart2>913</SelStart2><SelEnd2>913</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\GSHAL\GainSpan_SPI.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>343</YPos2><SelStart2>14992</SelStart2><SelEnd2>14992</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\ATCmdLib\AtCmdLib.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>2517</YPos2><SelStart2>96430</SelStart2><SelEnd2>96430</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Apps\mqtt.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>510</YPos2><SelStart2>15301</SelStart2><SelEnd2>15301</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Apps\mqtt_creds.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>425</SelStart2><SelEnd2>425</SelEnd2></Tab><ActiveTab>7</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Apps\mqtt.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>67</YPos2><SelStart2>7716</SelStart2><SelEnd2>7716</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\drv\RDKRL78_spi.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>54</YPos2><SelStart2>1586</SelStart2><SelEnd2>1586</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\applilet3_src\r_cg_serial.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>577</YPos2><SelStart2>26882</SelStart2><SelEnd2>26882</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\applilet3_src\r_cg_serial_user.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>379</YPos2><SelStart2>20461</SelStart2><SelEnd2>20461</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\GSHAL\GSHAL.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>73</YPos2><SelStart2>3069</SelStart2><SelEnd2>3069</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>100</YPos2><SelStart2>3706</SelStart2><SelEnd2>3706</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Apps\App_WhiskerGW.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>553</YPos2><SelStart2>20817</SelStart2><SelEnd2>20817</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\Apps\xr20m1170.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>103</YPos2><SelStart2>4326</SelStart2><SelEnd2>4326</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\ATCmdLib\AtCmdLib.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>65</YPos2><SelStart2>2444</SelStart2><SelEnd2>2444</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\GSHAL\mstimer.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>66</YPos2><SelStart2>2709</SelStart2><SelEnd2>2709</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-010ED588><key>iaridepm.enu1</key></Toolbar-010ED588></Sizes></Row0><Row1><Sizes/></Row1><Row2><Sizes/></Row2><Row3><Sizes/></Row3><Row4><Sizes/></Row4><Row5><Sizes/></Row5><Row6><Sizes/></Row6><Row7><Sizes/></Row7><Row8><Sizes/></Row8><Row9><Sizes/></Row9><Row10><Sizes/></Row10><Row11><Sizes/></Row11><Row12><Sizes/></Row12><Row13><Sizes/></Row13><Row14><Sizes/></Row14><Row15><Sizes/></Row15><Row16><Sizes/></Row16><Row17><Sizes/></Row17><Row18><Sizes/></Row18><Row19><Sizes/></Row19><Row20><Sizes/></Row20><Row21><Sizes/></Row21><Row22><Sizes/></Row22><Row23><Sizes/></Row23><Row24><Sizes/></Row24><Row25><Sizes/></Row25><Row26><Sizes/></Row26><Row27><Sizes/></Row27><Row28><Sizes/></Row28><Row29><Sizes/></Row29><Row30><Sizes/></Row30><Row31><Sizes/></Row31><Row32><Sizes/></Row32><Row33><Sizes/></Row33><Row34><Sizes/></Row34><Row35><Sizes/></Row35><Row36><Sizes/></Row36><Row37><Sizes/></Row37><Row38><Sizes/></Row38><Row39><Sizes/></Row39><Row40><Sizes/></Row40><Row41><Sizes/></Row41><Row42><Sizes/></Row42><Row43><Sizes/></Row43><Row44><Sizes/></Row44><Row45><Sizes/></Row45><Row46><Sizes/></Row46><Row47><Sizes/></Row47><Row48><Sizes/></Row48></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>651</Bottom><Right>296</Right><x>-2</x><y>-2</y><xscreen>113</xscreen><yscreen>148</yscreen><sizeHorzCX>70625</sizeHorzCX><sizeHorzCY>180929</sizeHorzCY><sizeVertCX>186250</sizeVertCX><sizeVertCY>798289</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>122</Bottom><Right>1602</Right><x>-2</x><y>-2</y><xscreen>1604</xscreen><yscreen>124</yscreen><sizeHorzCX>1002500</sizeHorzCX><sizeHorzCY>151589</sizeHorzCY><sizeVertCX>86875</sizeVertCX><sizeVertCY>163814</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

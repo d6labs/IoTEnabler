@@ -1,0 +1,754 @@
+;------------------------------------------------------------------------------
+; Module       = hwmdu_LibReplacement_RL78_2.s87
+; Version      = 1.2
+;------------------------------------------------------------------------------
+;                                  COPYRIGHT
+;------------------------------------------------------------------------------
+; Copyright (c) 2013 by Renesas Electronics Europe GmbH,
+;               a company of the Renesas Electronics Corporation
+;------------------------------------------------------------------------------
+; Purpose:
+;       sample code to use RL78_2 Hardware Multiply Division Unit (HW_MDU)
+;
+;------------------------------------------------------------------------------
+;
+; Warranty Disclaimer
+;
+; Because the Product(s) is licensed free of charge, there is no warranty
+; of any kind whatsoever and expressly disclaimed and excluded by Renesas,
+; either expressed or implied, including but not limited to those for
+; non-infringement of intellectual property, merchantability and/or
+; fitness for the particular purpose.
+; Renesas shall not have any obligation to maintain, service or provide bug
+; fixes for the supplied Product(s) and/or the Application.
+;
+; Each User is solely responsible for determining the appropriateness of
+; using the Product(s) and assumes all risks associated with its exercise
+; of rights under this Agreement, including, but not limited to the risks
+; and costs of program errors, compliance with applicable laws, damage to
+; or loss of data, programs or equipment, and unavailability or
+; interruption of operations.
+;
+; Limitation of Liability
+;
+; In no event shall Renesas be liable to the User for any incidental,
+; consequential, indirect, or punitive damage (including but not limited
+; to lost profits) regardless of whether such liability is based on breach
+; of contract, tort, strict liability, breach of warranties, failure of
+; essential purpose or otherwise and even if advised of the possibility of
+; such damages. Renesas shall not be liable for any services or products
+; provided by third party vendors, developers or consultants identified or
+; referred to the User by Renesas in connection with the Product(s) and/or the
+; Application.
+;
+;------------------------------------------------------------------------------
+;
+;------------------------------------------------------------------------------
+; History: 1.0 Initial version
+;          1.1  - Correction of signed division functions 
+;                 to achieve interrupt safety
+;               - unnecessary function HWMUL_32_32_32 removed
+;               - modulo functions added 
+;          1.2  - Correction of 16bit signed division and modulo functions 
+;                 (preserve of register BC to be compatible to SW-library)
+;  
+;------------------------------------------------------------------------------
+;
+;---------------------------------CAUTION--------------------------------------
+;
+; In case of using these functions interrupt handling is delayed!
+;
+;------------------------------------------------------------------------------
+;
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+
+#if __CORE__ != __RL78_2__
+    #error "Source Code for for RL78_2 devices only"
+#endif
+
+;------------------------------------------------------------------------------
+;       Division of two unsigned chars
+;
+;       Input:  A         Operand 1
+;               X         Operand 2
+;
+;       Call:   CALL       HWDIV_8_8_8
+;
+;       Output: A         Operand1 div Operand2
+;               Z-flag
+; This function can be used as replacement for the library function ?UC_DIV_L01
+; by using the linker option -eHWDIV_8_8_8=?UC_DIV_L01
+;------------------------------------------------------------------------------
+        LIBRARY __HWDIV_8_8_8
+        PUBLIC  HWDIV_8_8_8
+        RSEG RCODE:CODE
+HWDIV_8_8_8:
+        PUSH  DE
+
+        MOVW  DE,AX
+        CMP0  X                   ; divison by zero ?
+        BZ    LABEL2
+        CLRB  A
+        XCHW  AX,DE 
+        CLRB  X
+        XCH   A,X
+        DIVHU
+        XCH   A,X
+
+LABEL2:
+        ; set / clear Z-Flag according to the result
+        CMP0  A
+
+        POP   DE       
+
+        RET
+        ENDMOD
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+;       Modulo Operation of two unsigned chars
+;
+;       Input:  A         Operand 1
+;               X         Operand 2
+;
+;       Call:   CALL       HWMOD_8_8_8
+;
+;       Output: A         Operand1 modulo Operand2
+;               Z-flag
+; This function can be used as replacement for the library function ?UC_MOD_L01
+; by using the linker option -eHWMOD_8_8_8=?UC_MOD_L01
+;------------------------------------------------------------------------------
+        LIBRARY __HWMOD_8_8_8
+        PUBLIC  HWMOD_8_8_8
+        RSEG RCODE:CODE
+HWMOD_8_8_8:
+        PUSH  DE
+
+        MOVW  DE,AX
+        CMP0  X                   ; divison by zero ?
+        XCH   A,X
+        BZ    LABEL2
+        XCH   A,X
+        CLRB  A
+        XCHW  AX,DE 
+        CLRB  X
+        XCH   A,X
+        DIVHU
+        MOV   A,E
+
+LABEL2:
+        ; set / clear Z-Flag according to the result
+        CMP0  A
+
+        POP   DE
+        
+        RET
+        ENDMOD
+;------------------------------------------------------------------------------
+
+
+;------------------------------------------------------------------------------
+;       Division of two signed chars
+;
+;       Input:  A         Operand 1
+;               X         Operand 2
+;
+;       Call:   CALL       HWSDIV_8_8_8
+;
+;       Output: A          Operand1 div Operand2
+;               Z-flag
+; This function can be used as replacement for the library function ?SC_DIV_L01
+; by using the linker option -eHWSDIV_8_8_8=?SC_DIV_L01
+;------------------------------------------------------------------------------
+        LIBRARY  __HWSDIV_8_8_8
+        PUBLIC   HWSDIV_8_8_8
+
+        RSEG RCODE:CODE
+HWSDIV_8_8_8:
+        PUSH  BC
+        PUSH  DE
+
+        MOVW  DE,AX
+        XOR   A, X                
+        AND   A, #80H             
+        MOV   C, A                ; C = 0x00 = positive,  0x80 = negative
+        MOVW  AX, DE              ; restore AX
+
+        CMP0  X                   ; divison by zero ?
+        BZ    LABEL2
+        CLRB  A
+        XCH   A,X
+        BF    A.7, LABEL3         ; negative value ?
+        SUB   X,A
+        CLRB  A
+        CMP0  A                   ; just to trigger the next skip instruction
+        SKZ
+
+LABEL3:
+        XCH   A,X
+        XCHW  AX,DE
+        CLRB  X
+        BF    A.7, LABEL1         ; negative value ?
+        SUB   X,A
+        CLRB  A
+        XCH   A,X
+
+LABEL1:
+        XCH   A,X
+        DIVHU
+
+        CMP0  C                   
+        SKNZ
+        XCH   A,X
+        SKZ
+        SUB   A,X
+
+LABEL2:
+        ; set / clear Z-Flag according to the result
+        CMP0  A
+
+        POP   DE
+        POP   BC
+
+        RET
+
+        ENDMOD
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+;       Modulo Operation of two signed chars
+;
+;       Input:  A         Operand 1
+;               X         Operand 2
+;
+;       Call:   CALL       HWSMOD_8_8_8
+;
+;       Output: A          Operand1 modulo Operand2
+;               Z-flag
+; This function can be used as replacement for the library function ?SC_MOD_L01
+; by using the linker option -eHWSMOD_8_8_8=?SC_MOD_L01
+;------------------------------------------------------------------------------
+        LIBRARY  __HWSMOD_8_8_8
+        PUBLIC   HWSMOD_8_8_8
+
+        RSEG RCODE:CODE
+HWSMOD_8_8_8:
+        PUSH  BC
+        PUSH  DE
+
+        MOVW  DE,AX
+        AND   A, #80H            
+        MOV   C, A                ; C = 0x00 = positive, 0x80 = negative
+        MOVW  AX, DE              ;
+
+        CMP0  X                   ; divison by zero ?
+        BZ    LABEL2
+        CLRB  A
+        XCH   A,X
+        BF    A.7, LABEL3         ; negative value ?
+        SUB   X,A
+        CLRB  A
+        CMP0  A
+        SKZ
+LABEL3:
+        XCH   A,X
+        XCHW  AX,DE      
+        CLRB  X
+        BF    A.7, LABEL1         ; negative value ?
+        SUB   X,A
+        CLRB  A
+        XCH   A,X
+          
+LABEL1:
+        XCH   A,X
+        DIVHU
+        
+        CMP0  C                   ; check negative flag
+        MOV   A,E
+        CLRB  X 
+        SKNZ
+        XCH   A,X
+        SKZ
+        SUB   X,A
+        
+LABEL2:
+        XCH   A,X
+        ; set / clear Z-Flag according to the result
+        CMP0  A
+        
+        POP   DE
+        POP   BC
+
+        RET
+
+        ENDMOD
+;------------------------------------------------------------------------------
+
+
+;------------------------------------------------------------------------------
+;       Division of two signed ints
+;
+;       Input:  AX         Operand 1
+;               BC         Operand 2
+;
+;       Call:   CALL       HWSDIV_16_16_16
+;
+;       Output: AX         Operand1 div Operand2
+;               Z-flag
+; This function can be used as replacement for the library function ?SI_DIV_L02
+; by using the linker option -eHWSDIV_16_16_16=?SI_DIV_L02
+;------------------------------------------------------------------------------
+        LIBRARY  __HWSDIV_16_16_16
+        PUBLIC   HWSDIV_16_16_16
+
+        RSEG RCODE:CODE
+HWSDIV_16_16_16:
+        PUSH  BC
+        PUSH  DE
+        PUSH  HL                  
+
+        MOVW  DE,AX               
+        XOR   A, B                
+        AND   A, #80H             
+        MOV   L, A                ; L = 0x00 = positive, 0x80 = negative
+        MOVW  AX, DE              
+
+        BF    A.7, LABEL1         ; negative value ?
+        MOVW  AX,#0x0000
+        SUB   A,E
+        XCH   A,X
+        SUBC  A,D
+LABEL1:
+        XCHW AX, BC
+        BF    A.7, LABEL2         ; negative value ?
+        MOVW  DE,AX
+        MOVW  AX,#0x0000
+        SUB   A,E
+        XCH   A,X
+        SUBC  A,D
+
+LABEL2:
+        CMPW  AX, #0x0000         ; divisor equal zero
+        MOVW  DE, AX
+        MOVW  AX, BC
+        BZ    LABEL3
+
+        DIVHU
+
+        XCH   A, L                ; read flag value
+        CMP0  A                   
+        XCH   A, L                
+        BZ    LABEL3
+        MOVW  DE,AX
+        MOVW  AX,#0x0000
+        SUB   A,E
+        XCH   A,X
+        SUBC  A,D
+LABEL3:
+        ; set / clear Z-Flag according to the result
+        CMPW  AX, #0x0000
+
+        POP   HL                  
+        POP   DE
+        POP   BC
+        RET
+
+        ENDMOD
+;------------------------------------------------------------------------------
+
+;------------------------------------------------------------------------------
+;       Modulo Operation of two signed ints
+;
+;       Input:  AX         Operand 1
+;               BC         Operand 2
+;
+;       Call:   CALL       HWSMOD_16_16_16
+;
+;       Output: AX         Operand1 div Operand2
+;               Z-flag
+; This function can be used as replacement for the library function ?SI_MOD_L02
+; by using the linker option -eHWSMOD_16_16_16=?SI_MOD_L02
+;------------------------------------------------------------------------------
+        LIBRARY  __HWSMOD_16_16_16
+        PUBLIC   HWSMOD_16_16_16
+
+        RSEG RCODE:CODE
+HWSMOD_16_16_16:
+        PUSH  BC
+        PUSH  DE
+        PUSH  HL
+
+        MOVW  DE,AX               
+        AND   A, #80H             
+        MOV   L, A                ; L = 0x00 = positive, 0x80 = negative
+        MOVW  AX, DE              
+
+        BF    A.7, LABEL1         ; negative value ?
+        MOVW  DE,AX
+        MOVW  AX,#0x0000
+        SUB   A,E
+        XCH   A,X
+        SUBC  A,D
+LABEL1:
+        XCHW AX, BC      
+        BF    A.7, LABEL2         ; negative value ?
+        MOVW  DE,AX
+        MOVW  AX,#0x0000
+        SUB   A,E
+        XCH   A,X
+        SUBC  A,D
+
+LABEL2:
+        CMPW  AX, #0x0000         ; divisor equal zero
+        MOVW  DE, AX
+        SKZ
+        MOVW  AX, BC
+        BZ    LABEL3
+
+        DIVHU
+
+        MOV   A,L
+        CMP0  A                  ; check negative flag 
+        MOVW  AX,DE
+        BZ    LABEL3
+        MOVW  AX,#0x0000
+        SUB   A,E
+        XCH   A,X
+        SUBC  A,D
+LABEL3:
+        ; set / clear Z-Flag according to the result
+        CMPW  AX, #0x0000
+
+        POP   HL
+        POP   DE
+        POP   BC
+        RET
+
+        ENDMOD
+;------------------------------------------------------------------------------
+
+
+;------------------------------------------------------------------------------
+;       Division of two signed longs
+;
+;       Input:  AX, BC     Operand 1
+;               Stack      Operand 2
+;
+;       Call:   CALL       HWSDIV_32_32_32
+;
+;       Output: AX, BC     Operand1 div Operand2
+;               Z-flag
+; This function can be used as replacement for the library function ?SL_DIV_L03
+; by using the linker option -eHWSDIV_32_32_32=?SL_DIV_L03
+;------------------------------------------------------------------------------
+        LIBRARY __HWSDIV_32_32_32
+        PUBLIC  HWSDIV_32_32_32
+        EXTERN  CHGSIGN_32
+        RSEG RCODE:CODE
+HWSDIV_32_32_32:
+        PUSH  DE
+        PUSH  HL
+
+        XCHW  AX,BC
+
+        PUSH  AX                  ; stack reservation for negative sign
+        PUSH  AX                  ; 
+        MOVW  HL,SP               ; 
+        XOR   A, [HL+15]          ; XOR highest bit from Operand 2
+        AND   A, #80H             ; 
+        MOV   [HL+2], A           ; store negative flag (0x00 = positive, 0x80 = negative)
+        POP   AX                  ; 
+
+
+
+
+        BF    A.7, LABEL5         ; negative value ?
+        XCHW  AX,BC
+        CALL  CHGSIGN_32          ; change sign
+        XCHW  AX,BC
+LABEL5:
+        PUSH  AX
+        PUSH  BC
+        MOVW  HL,SP
+        MOVW  AX,[HL+16]
+        CMPW  AX, #0x0000          ; high word zero ?
+        BZ    LABEL3
+
+        BF    A.7, LABEL6          ; negative value ?
+        XCHW  AX,BC
+        MOVW  AX,[HL+14]
+        CALL  CHGSIGN_32           ; change sign
+        BR    LABEL4
+LABEL6
+        XCHW  AX,BC
+        MOVW  AX,[HL+14]
+        BR    LABEL4
+LABEL3:
+        XCHW  AX,BC
+        MOVW  AX,[HL+14]
+        CMPW  AX, #0x0000          ; low word zero ?
+        BNZ   LABEL4
+
+        ; division by zero
+        ; clean up stack
+        MOVW  AX,[HL+12]
+        MOVW  [HL+16],AX
+        MOVW  AX,[HL+10]
+        MOVW  [HL+14],AX
+        MOVW  AX,[HL+8]
+        MOVW  [HL+12],AX
+        MOVW  AX,[HL+6]
+        MOVW  [HL+10],AX
+        MOVW  AX,[HL+4]
+        MOVW  [HL+8],AX
+        MOVW  AX,[HL+2]
+        MOVW  [HL+6],AX
+        MOVW  AX,HL
+        ADDW  AX,#0x08
+        MOVW  SP,AX
+        MOVW  AX,#0x0000
+        MOVW  BC,#0x0000
+        SET1  PSW.6
+        BR    LABEL2
+
+LABEL4:
+        ; start division
+        MOVW   DE,AX
+        XCHW   AX,BC
+        MOVW   HL,AX
+        POP    AX
+        POP    BC
+
+        DIVWU
+
+        ; check negative flag
+        PUSH  AX                          
+        MOVW  HL,SP
+        MOV   A, [HL+2]                   
+        CMP0  A                           
+        POP   AX                          
+
+        BZ    Label8
+        CALL  CHGSIGN_32          ; change sign
+Label8
+       ; clean up stack
+        XCHW  AX,DE
+        MOVW  HL,SP
+        MOVW  AX,[HL+8]
+        MOVW  [HL+12],AX
+        MOVW  AX,[HL+6]
+        MOVW  [HL+10],AX
+        MOVW  AX,[HL+4]
+        MOVW  [HL+8],AX
+        MOVW  AX,[HL+2]
+        MOVW  [HL+6],AX
+        MOVW  AX,[HL+0]
+        MOVW  [HL+4],AX
+        MOVW  AX,HL
+        ADDW  AX,#0x04
+        MOVW  SP,AX
+        XCHW  AX,DE
+
+        ; set / clear Z-Flag according to the result
+        XCHW  AX,BC
+        CMPW  AX, #0x0000
+        BNZ   LABEL1
+        XCHW  AX,BC
+        CMPW  AX, #0x0000
+        BR    LABEL2
+
+LABEL1:
+        XCHW  AX,BC
+
+LABEL2:
+        POP   HL    
+        POP   HL
+        POP   DE
+        RET
+        ENDMOD
+;------------------------------------------------------------------------------
+
+
+;------------------------------------------------------------------------------
+;       Modulo Operation of two signed longs
+;
+;       Input:  AX, BC     Operand 1
+;               Stack      Operand 2
+;
+;       Call:   CALL       HWSMOD_32_32_32
+;
+;       Output: AX, BC     Operand1 modulo Operand2
+;               Z-flag
+; This function can be used as replacement for the library function ?SL_MOD_L03
+; by using the linker option -eHWSMOD_32_32_32=?SL_MOD_L03
+;------------------------------------------------------------------------------
+        LIBRARY __HWSMOD_32_32_32
+        PUBLIC  HWSMOD_32_32_32
+        EXTERN  CHGSIGN_32
+        RSEG RCODE:CODE
+HWSMOD_32_32_32:
+        PUSH  DE
+        PUSH  HL
+
+        XCHW  AX,BC
+
+        PUSH  AX                  ; stack reservation for negative sign
+        PUSH  AX                  ; 
+        MOVW  HL,SP               ; 
+        AND   A, #80H             ; 
+        MOV   [HL+2], A           ; store negative flag (0x00 = positive, 0x80 = negative)
+        POP   AX                  ; 
+
+        BF    A.7, LABEL5         ; negative value ?
+        XCHW  AX,BC
+        CALL  CHGSIGN_32          ; change sign
+        XCHW  AX,BC
+LABEL5:
+        PUSH  AX
+        PUSH  BC
+        MOVW  HL,SP
+        MOVW  AX,[HL+16]
+        CMPW  AX, #0x0000          ; high word zero ?
+        BZ    LABEL3
+
+        BF    A.7, LABEL6          ; negative value ?
+        XCHW  AX,BC
+        MOVW  AX,[HL+14]
+        CALL  CHGSIGN_32           ; change sign
+        BR    LABEL4
+LABEL6
+        XCHW  AX,BC
+        MOVW  AX,[HL+14]
+        BR    LABEL4
+LABEL3:
+        XCHW  AX,BC
+        MOVW  AX,[HL+14]
+        CMPW  AX, #0x0000          ; low word zero ?
+        BNZ   LABEL4
+
+        ; division by zero
+        ; clean up stack
+        MOVW  AX,[HL+12]
+        MOVW  [HL+16],AX
+        MOVW  AX,[HL+10]
+        MOVW  [HL+14],AX
+        MOVW  AX,[HL+8]
+        MOVW  [HL+12],AX
+        MOVW  AX,[HL+6]
+        MOVW  [HL+10],AX
+        MOVW  AX,[HL+4]
+        MOVW  [HL+8],AX
+        MOVW  AX,[HL+2]
+        MOVW  [HL+6],AX
+        
+        MOV   A, [HL+4]                   
+        MOV   C,A
+        MOVW  AX,HL       
+        ADDW  AX,#0x08
+        MOVW  SP,AX
+
+        CMP0  C  
+        MOVW  AX,#0xED68
+        MOVW  BC,#0x0000
+        SKZ   
+        CALL  CHGSIGN_32          ; change sign    
+        CLR1  PSW.6
+        BR    LABEL2
+
+LABEL4:
+        ; start division
+        MOVW   DE,AX
+        XCHW   AX,BC
+        MOVW   HL,AX
+        POP    AX
+        POP    BC
+
+        DIVWU
+
+        ; check negative flag
+        PUSH  HL                          
+        MOVW  HL,SP
+        MOV   A, [HL+2]                   
+        CMP0  A                           
+        POP   BC
+        MOVW  AX,DE  
+
+        BZ    Label8
+        CALL  CHGSIGN_32          ; change sign
+Label8
+       ; clean up stack
+        XCHW  AX,DE
+        MOVW  HL,SP
+        MOVW  AX,[HL+8]
+        MOVW  [HL+12],AX
+        MOVW  AX,[HL+6]
+        MOVW  [HL+10],AX
+        MOVW  AX,[HL+4]
+        MOVW  [HL+8],AX
+        MOVW  AX,[HL+2]
+        MOVW  [HL+6],AX
+        MOVW  AX,[HL+0]
+        MOVW  [HL+4],AX
+        MOVW  AX,HL
+        ADDW  AX,#0x04
+        MOVW  SP,AX
+        XCHW  AX,DE
+
+        ; set / clear Z-Flag according to the result
+        XCHW  AX,BC
+        CMPW  AX, #0x0000
+        BNZ   LABEL1
+        XCHW  AX,BC
+        CMPW  AX, #0x0000
+        BR    LABEL2
+
+LABEL1:
+        XCHW  AX,BC
+
+LABEL2:
+        POP   HL    
+        POP   HL
+        POP   DE
+        RET
+        ENDMOD
+;------------------------------------------------------------------------------
+
+
+;------------------------------------------------------------------------------
+;       Change sign of long
+;
+;       Input:  AX, BC     Operand
+;
+;       Call:   CALL       CHGSIGN_32
+;
+;       Output: AX, BC     -(Operand)
+;------------------------------------------------------------------------------
+        LIBRARY __HWSxxx_32_32_32
+        PUBLIC  CHGSIGN_32
+        RSEG RCODE:CODE
+CHGSIGN_32:
+        PUSH HL
+        MOVW HL,AX
+        MOVW AX,#0x0000
+        SUB  A,L
+        XCH  A,X
+        SUBC A,H
+
+        MOVW HL,AX
+
+        MOVW AX,#0x0000
+        SUBC A,C
+        XCH  A,X
+        SUBC A,B
+
+        XCHW AX,BC
+        MOVW AX,HL
+
+        POP  HL
+        ret
+
+        ENDMOD
+;------------------------------------------------------------------------------
+
+        END
